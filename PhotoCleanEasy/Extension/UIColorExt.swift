@@ -25,4 +25,12 @@ extension UIColor {
         }
         self.init(red: CGFloat(r) / 255, green: CGFloat(g) / 255, blue: CGFloat(b) / 255, alpha: CGFloat(a) / 255)
     }
+    
+    
+    //define hex Color
+    static let c141414 = UIColor(hex: "#141414")
+    static let cAAAAAA = UIColor(hex: "#AAAAAA")
+    static let c50BD61 = UIColor(hex: "#50BD61")
+    static let c292929 = UIColor(hex: "#292929")
+    static let c3DD071 = UIColor(hex: "#3DD071")
 }

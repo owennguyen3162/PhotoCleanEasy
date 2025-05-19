@@ -1,5 +1,5 @@
 //
-//  Untitled.swift
+//  BaseViewController.swift
 //  PhotoCleanEasy
 //
 //  Created by Nguyen Anh Tuan on 14/5/25.
