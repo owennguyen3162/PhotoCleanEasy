@@ -26,9 +26,9 @@ class CleanerViewController: BaseViewController {
         return view
     }()
     
-    private lazy var circleProcessView: UIView = {
+    private lazy var progressCircleView: UIView = {
         let view = UIView()
-        view.backgroundColor = .green
+        view.backgroundColor = .clear
         return view
     }()
     
@@ -60,6 +60,63 @@ class CleanerViewController: BaseViewController {
         return button
     }()
     
+    private lazy var featureStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.distribution = .fillEqually
+        stackView.spacing = 10
+        return stackView
+    }()
+    
+    private lazy var photoCleaningCardUIView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .c292929
+        view.layer.cornerRadius = 10
+        return view
+    }()
+    private lazy var compressMediaCardUIView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .c292929
+        view.layer.cornerRadius = 10
+        return view
+    }()
+    
+    private lazy var photoCleaningImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.image = UIImage(named: "icPhotoCleaning") // Replace with your image asset name
+        return imageView
+    }()
+    
+    private lazy var photoCleaningLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        label.textAlignment = .left
+        label.numberOfLines = 2
+        label.text = "Clean Photos Cleaning"
+        return label
+    }()
+    
+    private lazy var compressImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.image = UIImage(named: "icCompressMedia")
+        return imageView
+    }()
+    
+    private lazy var compressLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        label.textAlignment = .left
+        label.numberOfLines = 2
+        label.text = "Compress Media"
+        return label
+    }()
+    
+    private var circularProgressView: CircularProcessView!
+    
     override func initUI() {
         super.initUI()
         view.backgroundColor = .c141414
@@ -67,13 +124,26 @@ class CleanerViewController: BaseViewController {
     }
     
     private func setupView() {
+        circularProgressView = CircularProcessView()
+        
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
+        
+        //contentView
         contentView.addSubview(viewStorageUsage)
-        viewStorageUsage.addSubview(circleProcessView)
+        contentView.addSubview(featureStackView)
+        
+        //viewstorageUsage
+        viewStorageUsage.addSubview(progressCircleView)
         viewStorageUsage.addSubview(titleStorageUsage)
         viewStorageUsage.addSubview(titleDiskSpace)
         viewStorageUsage.addSubview(buttonSmartScan)
+        
+        //hStackView
+        featureStackView.addArrangedSubview(photoCleaningCardUIView)
+        featureStackView.addArrangedSubview(compressMediaCardUIView)
+        
+        progressCircleView.addSubview(circularProgressView)
         
         scrollView.snp.makeConstraints { make in
             make.edges.equalTo(self.view.safeAreaLayoutGuide)
@@ -82,7 +152,7 @@ class CleanerViewController: BaseViewController {
         contentView.snp.makeConstraints { make in
             make.edges.equalTo(scrollView)
             make.width.equalTo(scrollView)
-            make.bottom.greaterThanOrEqualTo(viewStorageUsage.snp.bottom).offset(20)
+            make.bottom.greaterThanOrEqualTo(featureStackView.snp.bottom).offset(20)
         }
         
         viewStorageUsage.snp.makeConstraints { make in
@@ -91,32 +161,75 @@ class CleanerViewController: BaseViewController {
             make.height.equalTo(127)
         }
         
-        circleProcessView.snp.makeConstraints { make in
+        
+        progressCircleView.snp.makeConstraints { make in
             make.width.height.equalTo(103)
             make.centerY.equalToSuperview()
             make.leading.equalTo(viewStorageUsage.snp.leading).inset(24)
         }
         
         titleStorageUsage.snp.makeConstraints { make in
-            make.top.equalTo(circleProcessView.snp.top).inset(15)
-            make.leading.equalTo(circleProcessView.snp.trailing).inset(25)
+            make.top.equalTo(progressCircleView.snp.top).inset(15)
+            make.leading.equalTo(progressCircleView.snp.trailing).inset(25)
             make.trailing.equalToSuperview().inset(-5)
         }
         
         titleDiskSpace.snp.makeConstraints { make in
             make.top.equalTo(titleStorageUsage.snp.bottom).inset(-7)
-            make.leading.equalTo(circleProcessView.snp.trailing).inset(25)
+            make.leading.equalTo(progressCircleView.snp.trailing).inset(25)
             make.trailing.equalToSuperview().inset(-5)
         }
         
         buttonSmartScan.snp.makeConstraints { make in
             make.top.equalTo(titleDiskSpace.snp.bottom).inset(-7)
-            make.leading.equalTo(circleProcessView.snp.trailing).inset(-25)
+            make.leading.equalTo(progressCircleView.snp.trailing).inset(-25)
             make.trailing.equalToSuperview().inset(10)
             make.height.equalTo(35)
         }
-       
+        
         titleDiskSpace.text = cleanerViewModel.caculatorDiskSpaceInBytes()
+        
+        featureStackView.snp.makeConstraints { make in
+            make.top.equalTo(viewStorageUsage.snp.bottom).inset(-20)
+            make.leading.trailing.equalToSuperview().inset(20)
+            make.height.equalTo(72)
+        }
+        
+        // photoCleaningCardUIView
+        photoCleaningCardUIView.addSubview(photoCleaningImageView)
+        photoCleaningCardUIView.addSubview(photoCleaningLabel)
+        
+        photoCleaningImageView.snp.makeConstraints { make in
+            make.leading.equalToSuperview().inset(10)
+            make.centerY.equalToSuperview()
+            make.width.height.equalTo(40) // Adjust size as needed
+        }
+        
+        photoCleaningLabel.snp.makeConstraints { make in
+            make.leading.equalTo(photoCleaningImageView.snp.trailing).offset(10)
+            make.trailing.equalToSuperview().inset(10)
+            make.centerY.equalToSuperview()
+        }
+        
+        compressMediaCardUIView.addSubview(compressImageView)
+        compressMediaCardUIView.addSubview(compressLabel)
+        
+        compressImageView.snp.makeConstraints { make in
+            make.width.height.equalTo(40)
+            make.centerY.equalToSuperview()
+            make.leading.equalToSuperview().inset(10)
+        }
+        
+        compressLabel.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.equalTo(compressImageView.snp.trailing).offset(10)
+            make.trailing.equalToSuperview().inset(10)
+        }
+        
+        circularProgressView.snp.makeConstraints { make in
+            make.leading.trailing.top.bottom.equalToSuperview()
+        }
+        
         
     }
     
