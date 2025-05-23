@@ -126,6 +126,8 @@ class CleanerViewController: BaseViewController {
     private func setupView() {
         circularProgressView = CircularProcessView()
         
+        circularProgressView.value = Float(Double(UIDevice.current.usedDiskSpaceInBytes) / Double(UIDevice.current.totalDiskSpaceInBytes))
+        
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
