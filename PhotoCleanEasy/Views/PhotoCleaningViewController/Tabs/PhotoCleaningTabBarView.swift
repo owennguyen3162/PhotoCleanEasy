@@ -55,13 +55,18 @@ class PhotoCleaningTabBarView: UIView {
         guard let delegate = delegate else { return }
         delegate.didSelectTab(at: index)
         self.selectedIndex = index
-        [smartAlbumButton, photoLibraryButton].enumerated().forEach { (index, e) in
-            e?.tintColor = selectedIndex != index ? .c7F7F7F :  .white
+        
+        let items: [(button: UIButton?, line: UIView?)] = [
+            (button: smartAlbumButton, line: smartAlbLine),
+            (button: photoLibraryButton, line: photoLibLine)
+        ]
+        
+        items.enumerated().forEach { (i, item) in
+            let isSelected = i == selectedIndex
+            item.button?.tintColor = isSelected ? .white : .c7F7F7F
+            item.line?.backgroundColor = isSelected ? .c50BD61 : .clear
         }
         
-        [smartAlbLine, photoLibLine].enumerated().forEach { (index, e) in
-            e?.backgroundColor = selectedIndex != index ? .clear :  .c50BD61
-        }
     }
     
     @IBAction func onSelectSmartAlbums(_ sender: Any) {
