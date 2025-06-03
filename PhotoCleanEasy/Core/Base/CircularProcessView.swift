@@ -39,6 +39,7 @@ class CircularProcessView: UIView {
         }
     }
     
+    var previousValue: Float = 0.0
     
     private func initUI() {
         percentageLabel = UILabel()
@@ -87,8 +88,6 @@ class CircularProcessView: UIView {
         progressLayer.lineWidth = 9.0
         
         layer.addSublayer(progressLayer)
-        
-        
         setProgressWithAnimation(duration: duration, fromValue: 0, value: value)
         
     }
@@ -100,7 +99,10 @@ class CircularProcessView: UIView {
         animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.linear)
         animation.duration = duration
         progressLayer.strokeEnd = CGFloat(value)
-        progressLayer.add(animation, forKey: "animateCircle")
+        if previousValue != value {
+            progressLayer.add(animation, forKey: "animateCircle")
+        }
+        previousValue = value
     }
     
 }

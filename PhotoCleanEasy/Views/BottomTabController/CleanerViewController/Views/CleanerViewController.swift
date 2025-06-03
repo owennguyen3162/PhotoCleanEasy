@@ -94,7 +94,7 @@ class CleanerViewController: BaseViewController {
         label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         label.textAlignment = .left
         label.numberOfLines = 2
-        label.text = "Clean Photos Cleaning"
+        label.text = "Photos Cleaning"
         return label
     }()
     
@@ -120,6 +120,7 @@ class CleanerViewController: BaseViewController {
     override func initUI() {
         super.initUI()
         view.backgroundColor = .c141414
+        self.cleanerViewModel.requestPhotoLibraryPermission()
         setupView()
     }
     
@@ -201,6 +202,8 @@ class CleanerViewController: BaseViewController {
         photoCleaningCardUIView.addSubview(photoCleaningImageView)
         photoCleaningCardUIView.addSubview(photoCleaningLabel)
         
+        photoCleaningCardUIView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleNavigateToPhotoCleaning)))
+        
         photoCleaningImageView.snp.makeConstraints { make in
             make.leading.equalToSuperview().inset(10)
             make.centerY.equalToSuperview()
@@ -232,10 +235,15 @@ class CleanerViewController: BaseViewController {
             make.leading.trailing.top.bottom.equalToSuperview()
         }
         
-        
     }
     
     override func unmount() {
         super.unmount()
+    }
+    
+    @objc private func handleNavigateToPhotoCleaning() {
+        let photoCleaningVCViewController = PhotoCleaningVCViewController()
+        photoCleaningVCViewController.hidesBottomBarWhenPushed = true
+        self.navigationPush(photoCleaningVCViewController)
     }
 }

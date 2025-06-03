@@ -20,6 +20,11 @@ class BaseViewController: UIViewController, IViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+//        initUI()
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
         initUI()
     }
     
@@ -33,4 +38,15 @@ class BaseViewController: UIViewController, IViewController {
     func applicationDidBecomeActive(){}
     func applicationDidEnterBackground(){}
     
+}
+
+
+extension BaseViewController {
+    func navigationPush<T: UIViewController>(_ screen: T, animation: Bool = true) {
+        self.navigationController?.pushViewController(screen, animated: animation)
+    }
+    
+    func goBack() {
+        self.navigationController?.popViewController(animated: true)
+    }
 }
